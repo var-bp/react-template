@@ -1,0 +1,5 @@
+https://github.com/svg/svgo
+
+or
+
+https://jakearchibald.github.io/svgomg/
