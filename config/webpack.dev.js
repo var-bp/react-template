@@ -1,23 +1,25 @@
-const path = require("path");
-const webpack = require("webpack");
-const { merge } = require("webpack-merge");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CircularDependencyPlugin = require("circular-dependency-plugin");
-const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require('path');
+const webpack = require('webpack');
+const { merge } = require('webpack-merge');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = merge(
   {
-    mode: "development",
+    mode: 'development',
     // Stop compilation early in production
     bail: false,
-    devtool: "cheap-module-source-map",
-    devServer: require("./server.dev"),
+    devtool: 'cheap-module-source-map',
+    devServer: require('./server.dev'),
     output: {
-      filename: "js/[name].js",
+      filename: 'js/[name].js',
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: true,
       // Don't use hashes in dev mode for better performance
-      chunkFilename: "js/[name].chunk.js",
+      chunkFilename: 'js/[name].chunk.js',
     },
     module: {
       rules: [
@@ -27,9 +29,9 @@ module.exports = merge(
         {
           test: /\.css$/,
           use: [
-            "style-loader",
+            'style-loader',
             {
-              loader: "css-loader",
+              loader: 'css-loader',
               options: {
                 importLoaders: 1,
               },
@@ -38,16 +40,16 @@ module.exports = merge(
               // Options for PostCSS as we reference these options twice
               // Adds vendor prefixing based on your specified browser support in
               // package.json
-              loader: "postcss-loader",
+              loader: 'postcss-loader',
               options: {
                 postcssOptions: {
                   plugins: [
-                    "postcss-flexbugs-fixes",
+                    'postcss-flexbugs-fixes',
                     [
-                      "postcss-preset-env",
+                      'postcss-preset-env',
                       {
                         autoprefixer: {
-                          flexbox: "no-2009",
+                          flexbox: 'no-2009',
                         },
                         stage: 3,
                       },
@@ -55,7 +57,7 @@ module.exports = merge(
                     // Adds PostCSS Normalize as the reset css with default options,
                     // so that it honors browserslist config in package.json
                     // which in turn let's users customize the target behavior as per their needs.
-                    "postcss-normalize",
+                    'postcss-normalize',
                   ],
                 },
               },
@@ -71,9 +73,9 @@ module.exports = merge(
         {
           test: /\.(scss|sass)$/,
           use: [
-            "style-loader",
+            'style-loader',
             {
-              loader: "css-loader",
+              loader: 'css-loader',
               options: {
                 importLoaders: 2,
               },
@@ -82,16 +84,16 @@ module.exports = merge(
               // Options for PostCSS as we reference these options twice
               // Adds vendor prefixing based on your specified browser support in
               // package.json
-              loader: "postcss-loader",
+              loader: 'postcss-loader',
               options: {
                 postcssOptions: {
                   plugins: [
-                    "postcss-flexbugs-fixes",
+                    'postcss-flexbugs-fixes',
                     [
-                      "postcss-preset-env",
+                      'postcss-preset-env',
                       {
                         autoprefixer: {
-                          flexbox: "no-2009",
+                          flexbox: 'no-2009',
                         },
                         stage: 3,
                       },
@@ -99,14 +101,14 @@ module.exports = merge(
                     // Adds PostCSS Normalize as the reset css with default options,
                     // so that it honors browserslist config in package.json
                     // which in turn let's users customize the target behavior as per their needs.
-                    "postcss-normalize",
+                    'postcss-normalize',
                   ],
                 },
               },
             },
             {
-              loader: "sass-loader",
-            }
+              loader: 'sass-loader',
+            },
           ],
           // Don't consider CSS imports dead code even if the
           // containing package claims to have no side effects.
@@ -119,7 +121,7 @@ module.exports = merge(
     plugins: [
       // Makes some environment variables available to the JS code.
       new webpack.EnvironmentPlugin({
-        NODE_ENV: "development",
+        NODE_ENV: 'development',
       }),
       // This is necessary to emit hot updates (currently CSS only):
       new webpack.HotModuleReplacementPlugin(),
@@ -135,11 +137,11 @@ module.exports = merge(
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin({
         inject: true,
-        filename: "index.html",
-        template: path.join(__dirname, "../src/static/index.html"),
+        filename: 'index.html',
+        template: path.join(__dirname, '../src/static/index.html'),
       }),
-      new webpack.WatchIgnorePlugin([path.join(__dirname, "../node_modules")]),
+      new webpack.WatchIgnorePlugin([path.join(__dirname, '../node_modules')]),
     ],
   },
-  require("./webpack.base"),
+  require('./webpack.base'),
 );
