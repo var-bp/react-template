@@ -63,6 +63,23 @@ module.exports = merge(
       rules: [
         // Disable require.ensure as it's not a standard language feature.
         { parser: { requireEnsure: false } },
+        // First, run the linter.
+        // It's important to do this before Babel processes the JS.
+        {
+          test: /\.(js|mjs|jsx|ts|tsx)$/,
+          exclude: /node_modules/,
+          enforce: 'pre',
+          use: [
+            {
+              loader: 'eslint-loader',
+              options: {
+                cache: true,
+                eslintPath: 'eslint',
+                resolvePluginsRelativeTo: __dirname,
+              },
+            },
+          ],
+        },
         {
           test: /\.(js|mjs|jsx|ts|tsx)$/,
           exclude: /node_modules/,
