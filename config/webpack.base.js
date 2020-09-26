@@ -6,8 +6,6 @@ const { merge } = require('webpack-merge');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// https://blog.logrocket.com/guide-performance-optimization-webpack/
-
 module.exports = merge(
   {
     entry: {
@@ -57,7 +55,7 @@ module.exports = merge(
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support
       // some tools.
-      extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.jsonp'],
+      extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
     },
     module: {
       // Makes missing exports an error instead of warning.
