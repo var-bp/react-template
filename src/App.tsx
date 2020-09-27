@@ -1,10 +1,12 @@
 import React from 'react';
+import SomeFile from './components/some-file.stories';
 import logo from './static/vector/logo.svg';
 import './App.scss';
 
 const App = () => {
   return (
     <div className="App">
+      <SomeFile />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

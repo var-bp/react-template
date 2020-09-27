@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const { merge } = require('webpack-merge');
+const StylelintPlugin = require('stylelint-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -67,7 +68,7 @@ module.exports = merge(
         // It's important to do this before Babel processes the JS.
         {
           test: /\.(js|mjs|jsx|ts|tsx)$/,
-          exclude: /node_modules/,
+          include: path.join(__dirname, '../src'),
           enforce: 'pre',
           use: [
             {
@@ -109,6 +110,10 @@ module.exports = merge(
       ],
     },
     plugins: [
+      // A linter for CSS-like syntaxes like SCSS, Sass, Less and SugarSS
+      new StylelintPlugin({
+        files: '**/*.{scss,sass,css}',
+      }),
       new CopyWebpackPlugin({
         patterns: [
           {
