@@ -2,14 +2,17 @@
 // import 'react-app-polyfill/ie11';
 // import 'react-app-polyfill/stable';
 
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import './index.css';
+import GlobalStyle from './global-style';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root'),
+  <StrictMode>
+    <>
+      <GlobalStyle />
+      <App />
+    </>
+  </StrictMode>,
+  document.querySelector('#root'),
 );

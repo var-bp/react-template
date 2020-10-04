@@ -115,10 +115,6 @@ module.exports = merge(
                         stage: 3,
                       },
                     ],
-                    // Adds PostCSS Normalize as the reset css with default options,
-                    // so that it honors browserslist config in package.json
-                    // which in turn let's users customize the target behavior as per their needs.
-                    'postcss-normalize',
                   ],
                 },
                 sourceMap: IS_SOURCE_MAP,
@@ -163,10 +159,6 @@ module.exports = merge(
                         stage: 3,
                       },
                     ],
-                    // Adds PostCSS Normalize as the reset css with default options,
-                    // so that it honors browserslist config in package.json
-                    // which in turn let's users customize the target behavior as per their needs.
-                    'postcss-normalize',
                   ],
                 },
                 sourceMap: IS_SOURCE_MAP,
@@ -203,7 +195,7 @@ module.exports = merge(
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        template: path.join(__dirname, '../src/static/index.html'),
+        template: path.join(__dirname, '../public/index.html'),
         minify: {
           removeComments: true,
           collapseWhitespace: true,

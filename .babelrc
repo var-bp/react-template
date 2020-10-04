@@ -6,6 +6,7 @@
         "modules": false
       }
     ],
+    "@babel/preset-typescript",
     "@babel/preset-react"
   ],
 
@@ -33,6 +34,11 @@
     },
 
     "test": {
+      "presets": [
+        "@babel/env",
+        "@babel/preset-typescript",
+        "@babel/preset-react",
+      ],
       "plugins": [
         ["babel-plugin-styled-components", { "displayName": true, "fileName": true }]
       ]

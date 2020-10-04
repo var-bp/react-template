@@ -54,10 +54,6 @@ module.exports = merge(
                         stage: 3,
                       },
                     ],
-                    // Adds PostCSS Normalize as the reset css with default options,
-                    // so that it honors browserslist config in package.json
-                    // which in turn let's users customize the target behavior as per their needs.
-                    'postcss-normalize',
                   ],
                 },
               },
@@ -98,10 +94,6 @@ module.exports = merge(
                         stage: 3,
                       },
                     ],
-                    // Adds PostCSS Normalize as the reset css with default options,
-                    // so that it honors browserslist config in package.json
-                    // which in turn let's users customize the target behavior as per their needs.
-                    'postcss-normalize',
                   ],
                 },
               },
@@ -138,7 +130,7 @@ module.exports = merge(
       new HtmlWebpackPlugin({
         inject: true,
         filename: 'index.html',
-        template: path.join(__dirname, '../src/static/index.html'),
+        template: path.join(__dirname, '../public/index.html'),
       }),
       new webpack.WatchIgnorePlugin([path.join(__dirname, '../node_modules')]),
     ],
