@@ -16,25 +16,6 @@
     "test:coverage": "jest --config config/jest.js --coverage --colors --passWithNoTests",
     "test:watch": "jest --config config/jest.js --watch"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version",
-      "last 1 edge version"
-    ],
-    "test": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version",
-      "last 1 edge version"
-    ]
-  },
   "dependencies": {
     "@loadable/component": "5.13.2",
     "@reduxjs/toolkit": "1.4.0",
