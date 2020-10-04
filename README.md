@@ -18,13 +18,13 @@ The primary goal of this project is to provide a stable foundation upon which to
 - [end-to-end testing](https://www.cypress.io/)
 - [organized & efficient UI](https://storybook.js.org/)
 - [react cheatsheet](https://dev.to/codeartistryio/the-react-cheatsheet-for-2020-real-world-examples-4hgg)
-- [one option of <em>src</em> folder architecture](https://www.robinwieruch.de/react-folder-structure)
+- [one option of `./src` architecture](https://www.robinwieruch.de/react-folder-structure)
 - Git Hooks
   - [husky](https://github.com/typicode/husky)
   - [lint-staged](https://github.com/okonet/lint-staged)
 
 ## Features
-- support for .css & .js files
+- support for `.css` & `.js` files
 - TypeScript
 - Normalize.css
 - styled-components
