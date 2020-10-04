@@ -5,6 +5,7 @@ This TypeScript based template is designed to get you up and running with a bunc
 The primary goal of this project is to provide a stable foundation upon which to build modern web applications. Its purpose is not to dictate your project structure or to demonstrate a complete real-world application, but to provide a set of tools intended to make front-end development robust, easy, and, most importantly, fun.
 
 ## Tips & Tricks
+- [favicon generator](https://www.favicon-generator.org/)
 - compression
   - SVG: [SVGO](https://github.com/svg/svgo) or [SVGOMG](https://jakearchibald.github.io/svgomg/)
   - [PNG & JPEG](https://tinypng.com/)
