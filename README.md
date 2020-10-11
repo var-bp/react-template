@@ -43,7 +43,6 @@ The primary goal of this project is to provide a stable foundation upon which to
 - optional libraries
   - styled-media-query
   - @reduxjs/toolkit
-  - redux-thunk
   - polished
   - js-cookie
   - axios
