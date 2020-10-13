@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -136,6 +137,28 @@ module.exports = {
           },
         },
       ],
+    }),
+    // Generate an asset manifest file with the following content:
+    // - "files" key: Mapping of all asset filenames to their corresponding
+    //   output file so that tools can pick it up without having to parse
+    //   `index.html`
+    // - "entrypoints" key: Array of files which are included in `index.html`,
+    //   can be used to reconstruct the HTML if necessary
+    new ManifestPlugin({
+      fileName: 'asset-manifest.json',
+      publicPath: '/',
+      generate: (seed, files, entrypoints) => {
+        const manifestFiles = files.reduce((manifest, file) => {
+          // eslint-disable-next-line no-param-reassign
+          manifest[file.name] = file.path;
+          return manifest;
+        }, seed);
+        const entrypointFiles = entrypoints.app.filter((fileName) => !fileName.endsWith('.map'));
+        return {
+          files: manifestFiles,
+          entrypoints: entrypointFiles,
+        };
+      },
     }),
     ...conditionalPlugins(),
   ],
