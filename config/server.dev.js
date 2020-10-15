@@ -18,4 +18,7 @@ module.exports = {
   host: '0.0.0.0',
   port: 3000,
   public: 'http://localhost:3000',
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
 };

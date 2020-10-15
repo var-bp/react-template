@@ -6,6 +6,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const env = require('./env');
 
 module.exports = merge(
   {
@@ -114,6 +115,7 @@ module.exports = merge(
       // Makes some environment variables available to the JS code.
       new webpack.EnvironmentPlugin({
         NODE_ENV: 'development',
+        ...env,
       }),
       // This is necessary to emit hot updates (currently CSS only):
       new webpack.HotModuleReplacementPlugin(),
@@ -131,6 +133,10 @@ module.exports = merge(
         inject: true,
         filename: 'index.html',
         template: path.join(__dirname, '../public/index.html'),
+        env: {
+          NODE_ENV: 'development',
+          ...env,
+        },
       }),
       new webpack.WatchIgnorePlugin([path.join(__dirname, '../node_modules')]),
     ],

@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
+const cors = require('cors');
 const express = require('express');
 
 const APP = express();
 const PORT = 8080;
 const HOST = '0.0.0.0';
 
+APP.use(cors());
 APP.use(express.static(path.join(__dirname, '../build')));
 
 // Serve static gzip files

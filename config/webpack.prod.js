@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const env = require('./env');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const IS_SOURCE_MAP = false;
@@ -183,6 +184,7 @@ module.exports = merge(
       // Makes some environment variables available to the JS code.
       new webpack.EnvironmentPlugin({
         NODE_ENV: 'production',
+        ...env,
       }),
       new CompressionPlugin({
         // compression is only for js & css
@@ -196,6 +198,10 @@ module.exports = merge(
       new HtmlWebpackPlugin({
         filename: 'index.html',
         template: path.join(__dirname, '../public/index.html'),
+        env: {
+          NODE_ENV: 'production',
+          ...env,
+        },
         minify: {
           removeComments: true,
           collapseWhitespace: true,
