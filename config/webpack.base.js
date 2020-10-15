@@ -1,24 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
 const path = require('path');
-const fs = require('fs');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-const conditionalPlugins = () => {
-  const plugins = [];
-  // If no .env file then no Dotenv plugin.
-  if (fs.existsSync(path.join(__dirname, '../.env'))) {
-    plugins.push(
-      new Dotenv({
-        path: './.env',
-      }),
-    );
-  }
-  return plugins;
-};
 
 module.exports = {
   entry: {
@@ -160,6 +145,5 @@ module.exports = {
         };
       },
     }),
-    ...conditionalPlugins(),
   ],
 };
