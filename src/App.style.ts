@@ -11,10 +11,6 @@ const rotate = keyframes`
 `;
 
 export const Container = styled.div`
-  text-align: center;
-`;
-
-export const Header = styled.header`
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -23,6 +19,7 @@ export const Header = styled.header`
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: #fff;
+  text-align: center;
 `;
 
 export const Image = styled.img`
