@@ -34,6 +34,7 @@ The primary goal of this project is to provide a stable foundation upon which to
 - Prettier
 - stylelint (supports styled-components)
 - Babel
+- web-vitals
 - webpack
   - code splitting (css & js)
   - tree shaking
