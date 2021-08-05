@@ -6,7 +6,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const env = require('./env');
+const { env } = require('./utils');
 
 module.exports = merge(
   {
@@ -138,7 +138,7 @@ module.exports = merge(
           ...env,
         },
       }),
-      new webpack.WatchIgnorePlugin([path.join(__dirname, '../node_modules')]),
+      new webpack.WatchIgnorePlugin({ paths: [path.join(__dirname, '../node_modules')] }),
     ],
   },
   require('./webpack.base'),

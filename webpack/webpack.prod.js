@@ -2,15 +2,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const safePostCssParser = require('postcss-safe-parser');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const env = require('./env');
+const { env } = require('./utils');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const IS_SOURCE_MAP = false;
@@ -31,14 +29,10 @@ module.exports = merge(
         new TerserPlugin({
           terserOptions: {
             parse: {
-              // We want terser to parse ecma 8 code. However, we don't want it
-              // to apply any minification steps that turns valid ecma 5 code
-              // into invalid ecma 5 code. This is why the 'compress' and 'output'
-              // sections only apply transformations that are ecma 5 safe
-              ecma: 8,
+              ecma: 'esnext',
             },
             compress: {
-              ecma: 5,
+              ecma: 8,
               warnings: false,
               // Disabled because of an issue with Uglify breaking seemingly valid code.
               // Pending further investigation:
@@ -50,33 +44,33 @@ module.exports = merge(
               inline: 2,
             },
             mangle: {
-              safari10: true,
+              safari10: false,
             },
             output: {
-              ecma: 5,
+              ecma: 8,
               comments: false,
               // Turned on because emoji and regex is not minified properly using default.
               ascii_only: true,
             },
           },
-          sourceMap: IS_SOURCE_MAP,
         }),
-        new OptimizeCSSAssetsPlugin({
-          cssProcessorOptions: {
-            parser: safePostCssParser,
-            map: IS_SOURCE_MAP
-              ? {
-                  // `inline: false` forces the sourcemap to be output into a
-                  // separate file
-                  inline: false,
-                  // `annotation: true` appends the sourceMappingURL to the end of
-                  // the css file, helping the browser find the sourcemap
-                  annotation: true,
-                }
-              : false,
-          },
-          cssProcessorPluginOptions: {
+
+        new CssMinimizerPlugin({
+          minimizerOptions: {
             preset: ['default', { minifyFontValues: { removeQuotes: false } }],
+            processorOptions: {
+              parser: 'postcss-safe-parser',
+              map: IS_SOURCE_MAP
+                ? {
+                    // `inline: false` forces the sourcemap to be output into a
+                    // separate file
+                    inline: false,
+                    // `annotation: true` appends the sourceMappingURL to the end of
+                    // the css file, helping the browser find the sourcemap
+                    annotation: true,
+                  }
+                : false,
+            },
           },
         }),
       ],
@@ -191,9 +185,6 @@ module.exports = merge(
         test: /\.(js|css)$/,
         algorithm: 'gzip',
       }),
-      // In general it's good practice to clean the output folder before each
-      // build, so that only used files will be generated.
-      new CleanWebpackPlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin({
         filename: 'index.html',
@@ -232,7 +223,10 @@ module.exports = merge(
       // solution that requires the user to opt into importing specific locales.
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/,
+      }),
     ],
   },
   require('./webpack.base'),

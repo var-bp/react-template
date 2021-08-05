@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
 const path = require('path');
+const PACKAGE_JSON = require('./package.json');
 
 module.exports = {
   presets: [
@@ -45,24 +46,14 @@ module.exports = {
   ],
   env: {
     development: {
-      plugins: [
-        [
-          'babel-plugin-styled-components',
-          { displayName: true, namespace: process.env.MICROFRONTEND_NAME },
-        ],
-      ],
+      plugins: [['babel-plugin-styled-components', { displayName: true, namespace: PACKAGE_JSON.name }]],
     },
     production: {
       plugins: [
         'date-fns',
         'lodash',
-        [
-          'babel-plugin-styled-components',
-          { displayName: false, fileName: false, namespace: process.env.MICROFRONTEND_NAME },
-        ],
+        ['babel-plugin-styled-components', { displayName: false, fileName: false, namespace: PACKAGE_JSON.name }],
         'transform-react-remove-prop-types',
-        '@babel/plugin-transform-react-inline-elements',
-        '@babel/plugin-transform-react-constant-elements',
         ['react-remove-properties', { properties: ['data-testid'] }],
       ],
     },
