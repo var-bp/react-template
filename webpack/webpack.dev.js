@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const webpack = require('webpack');
@@ -14,6 +13,7 @@ module.exports = merge(
     // Stop compilation early in production
     bail: false,
     devtool: 'cheap-module-source-map',
+    // eslint-disable-next-line global-require
     devServer: require('./server.dev'),
     output: {
       filename: 'js/[name].js',
