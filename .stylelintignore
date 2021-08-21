@@ -2,6 +2,7 @@ build/
 node_modules/
 coverage/
 public/
+jest/
 .linaria-cache/
 package.json
 package-lock.json
