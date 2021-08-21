@@ -29,6 +29,7 @@ module.exports = merge(
         // "style" loader turns CSS into JS modules that inject <style> tags.
         {
           test: /\.css$/,
+          resourceQuery: { not: [/raw/] },
           use: [
             'style-loader',
             {
@@ -117,8 +118,6 @@ module.exports = merge(
         NODE_ENV: 'development',
         ...env,
       }),
-      // This is necessary to emit hot updates (currently CSS only):
-      new webpack.HotModuleReplacementPlugin(),
       // Watcher doesn't work well if you mistype casing in a path so we use
       // a plugin that prints an error when you attempt to do this.
       new CaseSensitivePathsPlugin(),

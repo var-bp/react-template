@@ -22,6 +22,7 @@ module.exports = merge(
     output: {
       filename: 'js/[name].[contenthash:8].js',
       chunkFilename: 'js/[name].[contenthash:8].chunk.js',
+      clean: true,
     },
     optimization: {
       minimize: true,
@@ -34,14 +35,6 @@ module.exports = merge(
             compress: {
               ecma: 8,
               warnings: false,
-              // Disabled because of an issue with Uglify breaking seemingly valid code.
-              // Pending further investigation:
-              // https://github.com/mishoo/UglifyJS2/issues/2011
-              comparisons: false,
-              // Disabled because of an issue with Terser breaking valid code.
-              // Pending further investigation:
-              // https://github.com/terser-js/terser/issues/120
-              inline: 2,
             },
             mangle: {
               safari10: false,
@@ -81,6 +74,7 @@ module.exports = merge(
         // "css" loader resolves paths in CSS and adds assets as dependencies.
         {
           test: /\.css$/,
+          resourceQuery: { not: [/raw/] },
           use: [
             {
               loader: MiniCssExtractPlugin.loader,

@@ -62,15 +62,23 @@ module.exports = {
       {
         test: /\.(js|mjs|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            // This is a feature of `babel-loader` for webpack (not Babel itself).
-            // It enables caching results in ./node_modules/.cache/babel-loader/
-            // directory for faster rebuilds.
-            cacheDirectory: true,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              // This is a feature of `babel-loader` for webpack (not Babel itself).
+              // It enables caching results in ./node_modules/.cache/babel-loader/
+              // directory for faster rebuilds.
+              cacheDirectory: true,
+            },
           },
-        },
+          {
+            loader: '@linaria/webpack-loader',
+            options: {
+              sourceMap: false,
+            },
+          },
+        ],
       },
       {
         // https://github.com/jantimon/html-webpack-plugin/issues/1589#issuecomment-768418074
@@ -79,6 +87,11 @@ module.exports = {
         generator: {
           filename: 'static/[name].[hash:8][ext]',
         },
+      },
+      // https://webpack.js.org/guides/asset-modules/#replacing-inline-loader-syntax
+      {
+        resourceQuery: /raw/,
+        type: 'asset/source',
       },
     ],
   },

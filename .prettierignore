@@ -2,6 +2,7 @@ build/
 node_modules/
 coverage/
 public/
+.linaria-cache/
 package.json
 package-lock.json
 yarn.lock

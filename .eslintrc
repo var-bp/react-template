@@ -2,22 +2,18 @@
   "parser": "@typescript-eslint/parser",
   "extends": [
     "airbnb-typescript",
-    "airbnb/hooks",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jest/recommended",
-    "prettier",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "plugins": [
-    "react",
-    "@typescript-eslint",
-    "jest"
+    "react-hooks",
+    "prettier"
   ],
   "env": {
     "jest": true,
     "browser": true
   },
   "parserOptions": {
+    "ecmaVersion": "latest",
     "ecmaFeatures": {
       "jsx": true
     },
@@ -27,11 +23,24 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[jt]s?(x)"
+      ],
+      "extends": [
+        "plugin:testing-library/react",
+        "plugin:jest-dom/recommended",
+        "plugin:jest/recommended"
+      ]
+    }
+  ],
   "rules": {
     "prettier/prettier": "error",
+    "import/no-extraneous-dependencies": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "import/no-extraneous-dependencies": "off",
     "react/state-in-constructor": "off"
   }
 }

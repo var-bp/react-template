@@ -1,18 +1,17 @@
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import GlobalStyle from './global-style';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <StrictMode>
-    <>
-      <GlobalStyle />
-      <App />
-    </>
+    <App />
   </StrictMode>,
   document.querySelector('#root'),
 );
+
+// eslint-disable-next-line import/prefer-default-export
+export { globals } from './global-style';
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
