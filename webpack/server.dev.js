@@ -10,11 +10,11 @@ module.exports = {
   open: false,
   // Enable gzip compression of generated files.
   compress: false,
-  // Enable hot reloading server. It will provide WDS_SOCKET_PATH endpoint
-  // for the WebpackDevServer client so it can learn when the files were
-  // updated. The WebpackDevServer client is included as an entry point
-  // in the webpack development configuration. Note that only changes
-  // to CSS are currently hot reloaded. JS changes will refresh the browser.
+  client: {
+    overlay: {
+      warnings: false,
+    },
+  },
   hot: true,
   historyApiFallback: true,
   host: '0.0.0.0',
