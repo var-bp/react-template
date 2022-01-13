@@ -19,6 +19,7 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
       name: false,
+      // maxSize: 1000 * 600, // 600KB, average .js file will be ~300KB
     },
     // Keep the runtime chunk separated to enable long term caching.
     runtimeChunk: {
