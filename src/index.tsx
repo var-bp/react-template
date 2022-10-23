@@ -1,13 +1,12 @@
-import React, { StrictMode } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <StrictMode>
+createRoot(document.querySelector('#root') as HTMLElement).render(
+  <React.StrictMode>
     <App />
-  </StrictMode>,
-  document.querySelector('#root'),
+  </React.StrictMode>,
 );
 
 // eslint-disable-next-line import/prefer-default-export

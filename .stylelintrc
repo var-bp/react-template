@@ -3,6 +3,12 @@
     "stylelint-config-recommended",
     "@linaria/stylelint"
   ],
+  "overrides": [
+    {
+      "files": ["**/*/*.{ts,tsx,js,jsx}"],
+      "customSyntax": "@stylelint/postcss-css-in-js"
+    }
+  ],
   "rules": {
     "selector-pseudo-class-no-unknown": [
       true,

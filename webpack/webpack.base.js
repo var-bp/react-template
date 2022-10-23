@@ -2,6 +2,7 @@
 const path = require('path');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const PACKAGE_JSON = require('../package.json');
 
 module.exports = {
@@ -45,42 +46,21 @@ module.exports = {
     rules: [
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
-      {
-        test: /\.(js|mjs|jsx|ts|tsx)$/,
-        include: path.join(__dirname, '../src'),
-        enforce: 'pre',
-        use: [
-          {
-            loader: 'eslint-loader',
-            options: {
-              cache: true,
-              eslintPath: 'eslint',
-              resolvePluginsRelativeTo: __dirname,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(js|mjs|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              // This is a feature of `babel-loader` for webpack (not Babel itself).
-              // It enables caching results in ./node_modules/.cache/babel-loader/
-              // directory for faster rebuilds.
-              cacheDirectory: true,
-            },
-          },
-          {
-            loader: '@linaria/webpack-loader',
-            options: {
-              sourceMap: false,
-            },
-          },
-        ],
-      },
+      // {
+      //   test: /\.(js|mjs|jsx|ts|tsx)$/,
+      //   include: path.join(__dirname, '../src'),
+      //   enforce: 'pre',
+      //   use: [
+      //     {
+      //       loader: 'eslint-loader',
+      //       options: {
+      //         cache: true,
+      //         eslintPath: 'eslint',
+      //         resolvePluginsRelativeTo: __dirname,
+      //       },
+      //     },
+      //   ],
+      // },
       {
         // https://github.com/jantimon/html-webpack-plugin/issues/1589#issuecomment-768418074
         exclude: [/(^|\.(js|mjs|jsx|ts|tsx|html|css|scss|sass|json|jsonp))$/],
@@ -109,6 +89,7 @@ module.exports = {
         },
       ],
     }),
+    new ESLintPlugin({ extensions: ['js', 'jsx', 'ts', 'tsx'] }),
     // Generate an asset manifest file with the following content:
     // - "files" key: Mapping of all asset filenames to their corresponding
     //   output file so that tools can pick it up without having to parse

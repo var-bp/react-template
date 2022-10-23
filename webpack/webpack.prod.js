@@ -3,11 +3,10 @@ const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+// const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { env } = require('./utils');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -33,43 +32,47 @@ module.exports = merge(
               ecma: 'esnext',
             },
             compress: {
-              ecma: 8,
+              ecma: 2020,
               warnings: false,
             },
             mangle: {
               safari10: false,
             },
             output: {
-              ecma: 8,
+              ecma: 2020,
               comments: false,
               // Turned on because emoji and regex is not minified properly using default.
               ascii_only: true,
             },
           },
         }),
-
-        new CssMinimizerPlugin({
-          minimizerOptions: {
-            preset: ['default', { minifyFontValues: { removeQuotes: false } }],
-            processorOptions: {
-              parser: 'postcss-safe-parser',
-              map: IS_SOURCE_MAP
-                ? {
-                    // `inline: false` forces the sourcemap to be output into a
-                    // separate file
-                    inline: false,
-                    // `annotation: true` appends the sourceMappingURL to the end of
-                    // the css file, helping the browser find the sourcemap
-                    annotation: true,
-                  }
-                : false,
-            },
-          },
-        }),
+        new CssMinimizerPlugin(),
       ],
     },
     module: {
       rules: [
+        {
+          test: /\.(js|mjs|jsx|ts|tsx)$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                // This is a feature of `babel-loader` for webpack (not Babel itself).
+                // It enables caching results in ./node_modules/.cache/babel-loader/
+                // directory for faster rebuilds.
+                cacheDirectory: true,
+                compact: true,
+              },
+            },
+            {
+              loader: '@linaria/webpack-loader',
+              options: {
+                sourceMap: IS_SOURCE_MAP,
+              },
+            },
+          ],
+        },
         // "postcss" loader applies autoprefixer to our CSS.
         // "css" loader resolves paths in CSS and adds assets as dependencies.
         {
@@ -93,6 +96,8 @@ module.exports = merge(
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
+                  ident: 'postcss',
+                  config: false,
                   plugins: [
                     'postcss-sort-media-queries',
                     'postcss-flexbugs-fixes',
@@ -138,6 +143,8 @@ module.exports = merge(
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
+                  ident: 'postcss',
+                  config: false,
                   plugins: [
                     'postcss-flexbugs-fixes',
                     [
@@ -175,11 +182,11 @@ module.exports = merge(
         NODE_ENV: 'production',
         ...env,
       }),
-      new CompressionPlugin({
-        // compression is only for js & css
-        test: /\.(js|css)$/,
-        algorithm: 'gzip',
-      }),
+      // new CompressionPlugin({
+      //   // compression is only for js & css
+      //   test: /\.(js|css)$/,
+      //   algorithm: 'gzip',
+      // }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin({
         filename: 'index.html',
@@ -200,12 +207,6 @@ module.exports = merge(
           minifyCSS: true,
           minifyURLs: true,
         },
-      }),
-      // Detect modules with circular dependencies
-      new CircularDependencyPlugin({
-        exclude: /a\.js|node_modules/,
-        failOnError: true,
-        allowAsyncCycles: true,
       }),
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output

@@ -6,7 +6,8 @@
   ],
   "plugins": [
     "react-hooks",
-    "prettier"
+    "prettier",
+    "import"
   ],
   "env": {
     "jest": true,
@@ -41,6 +42,7 @@
     "import/no-extraneous-dependencies": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/state-in-constructor": "off"
+    "react/state-in-constructor": "off",
+    "react/jsx-filename-extension": "off"
   }
 }

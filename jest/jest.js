@@ -17,4 +17,5 @@ module.exports = {
   },
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json', 'jsx', 'node'],
   watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
+  resetMocks: true,
 };

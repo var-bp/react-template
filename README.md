@@ -18,28 +18,32 @@ The primary goal of this project is to provide a stable foundation upon which to
 - [TypeScript docs](https://www.typescriptlang.org/docs/)
 - [end-to-end testing](https://www.cypress.io/)
 - [organized & efficient UI](https://storybook.js.org/)
-- [react cheatsheet](https://dev.to/codeartistryio/the-react-cheatsheet-for-2020-real-world-examples-4hgg)
 - [one option of `./src` architecture](https://www.robinwieruch.de/react-folder-structure)
 - Git Hooks
   - [husky](https://github.com/typicode/husky)
   - [lint-staged](https://github.com/okonet/lint-staged)
+- Linaria
+  - https://pustelto.com/blog/css-vs-css-in-js-perf
+  - https://github.com/callstack/linaria/blob/master/docs/BENEFITS.md#why-use-linaria
+  - https://github.com/stylelint/stylelint/issues/4119
+  - https://github.com/callstack/linaria/issues/409#issuecomment-593968972
+  - https://github.com/callstack/linaria/blob/master/docs/DYNAMIC_STYLES.md
 
 ## Features
 - support for `.css` & `.js` files
 - TypeScript
+- linaria
 - Normalize.css
-- styled-components
 - browserslist
 - ESLint
 - Prettier
-- stylelint (supports styled-components)
+- stylelint
 - Babel
 - web-vitals
 - webpack
   - code splitting (css & js)
   - tree shaking
   - terser
-  - zopfli/brotli/gzip
 - Jest & React Testing Library
 - optional libraries
   - styled-media-query
