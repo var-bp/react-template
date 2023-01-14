@@ -10,6 +10,8 @@ declare namespace NodeJS {
   }
 }
 
+declare module '*.module.css';
+
 declare module '*.css' {
   const src: string;
   export default src;

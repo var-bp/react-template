@@ -6,7 +6,15 @@ module.exports = {
   testMatch: ['<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}', '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
   testEnvironment: 'jest-environment-jsdom',
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': [
+      '<rootDir>/node_modules/esbuild-jest',
+      {
+        loaders: {
+          '.ts': 'ts',
+          '.tsx': 'tsx',
+        },
+      },
+    ],
     '^.+\\.css$': '<rootDir>/jest/cssTransform.js',
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '<rootDir>/jest/fileTransform.js',
   },

@@ -1,7 +1,7 @@
 build/
-node_modules/
 coverage/
+jest/
+node_modules/
 public/
 package.json
 package-lock.json
-yarn.lock

@@ -1,17 +1,17 @@
 import React from 'react';
 import logo from './logo.svg';
-import { Container, Img, Link } from './App.style';
+import styles from './App.module.css';
 
-const App = (): JSX.Element => (
-  <Container>
-    <Img src={logo} alt="logo" />
+const App = () => (
+  <div className={styles.container}>
+    <img className={styles.img} src={logo} alt="logo" />
     <p>
       Edit <code>src/App.tsx</code> and save to reload.
     </p>
-    <Link href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+    <a className={styles.link} href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
       Learn React
-    </Link>
-  </Container>
+    </a>
+  </div>
 );
 
 export default App;

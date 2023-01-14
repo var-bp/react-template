@@ -2,12 +2,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const TerserPlugin = require('terser-webpack-plugin');
 // const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const { ESBuildMinifyPlugin } = require('esbuild-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { env } = require('./utils');
+const { env, getCSSModuleLocalIdent } = require('./utils');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const IS_SOURCE_MAP = false;
@@ -26,73 +25,35 @@ module.exports = merge(
     optimization: {
       minimize: true,
       minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            parse: {
-              ecma: 'esnext',
-            },
-            compress: {
-              ecma: 2020,
-              warnings: false,
-            },
-            mangle: {
-              safari10: false,
-            },
-            output: {
-              ecma: 2020,
-              comments: false,
-              // Turned on because emoji and regex is not minified properly using default.
-              ascii_only: true,
-            },
-          },
+        new ESBuildMinifyPlugin({
+          target: 'es2020',
+          css: true,
         }),
-        new CssMinimizerPlugin(),
       ],
     },
     module: {
       rules: [
-        {
-          test: /\.(js|mjs|jsx|ts|tsx)$/,
-          exclude: /node_modules/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                // This is a feature of `babel-loader` for webpack (not Babel itself).
-                // It enables caching results in ./node_modules/.cache/babel-loader/
-                // directory for faster rebuilds.
-                cacheDirectory: true,
-                compact: true,
-              },
-            },
-            {
-              loader: '@linaria/webpack-loader',
-              options: {
-                sourceMap: IS_SOURCE_MAP,
-              },
-            },
-          ],
-        },
         // "postcss" loader applies autoprefixer to our CSS.
         // "css" loader resolves paths in CSS and adds assets as dependencies.
         {
           test: /\.css$/,
+          exclude: /\.module\.css$/,
           resourceQuery: { not: [/raw/] },
           use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-            },
+            { loader: MiniCssExtractPlugin.loader },
             {
               loader: 'css-loader',
               options: {
                 importLoaders: 1,
                 sourceMap: IS_SOURCE_MAP,
+                modules: {
+                  mode: 'icss',
+                },
               },
             },
             {
               // Options for PostCSS as we reference these options twice
-              // Adds vendor prefixing based on your specified browser support in
-              // package.json
+              // Adds vendor prefixing based on your specified browser support in .browserslistrc
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
@@ -122,30 +83,33 @@ module.exports = merge(
           // See https://github.com/webpack/webpack/issues/6571
           sideEffects: true,
         },
-        // Opt-in support for SASS (using .scss or .sass extensions).
         {
-          test: /\.(scss|sass)$/,
+          test: /\.module\.css$/,
+          resourceQuery: { not: [/raw/] },
           use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-            },
+            { loader: MiniCssExtractPlugin.loader },
             {
               loader: 'css-loader',
               options: {
-                importLoaders: 2,
-                sourceMap: IS_SOURCE_MAP,
+                importLoaders: 1,
+                sourceMap: true,
+                modules: {
+                  // Using 'local' value has same effect like using 'modules: true'
+                  mode: 'local',
+                  getLocalIdent: getCSSModuleLocalIdent,
+                },
               },
             },
             {
               // Options for PostCSS as we reference these options twice
-              // Adds vendor prefixing based on your specified browser support in
-              // package.json
+              // Adds vendor prefixing based on your specified browser support in .browserslistrc
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
                   ident: 'postcss',
                   config: false,
                   plugins: [
+                    'postcss-sort-media-queries',
                     'postcss-flexbugs-fixes',
                     [
                       'postcss-preset-env',
@@ -158,12 +122,6 @@ module.exports = merge(
                     ],
                   ],
                 },
-                sourceMap: IS_SOURCE_MAP,
-              },
-            },
-            {
-              loader: 'sass-loader',
-              options: {
                 sourceMap: IS_SOURCE_MAP,
               },
             },

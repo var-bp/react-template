@@ -5,8 +5,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const { env } = require('./utils');
+const { env, getCSSModuleLocalIdent } = require('./utils');
 
 module.exports = merge(
   {
@@ -25,33 +24,12 @@ module.exports = merge(
     },
     module: {
       rules: [
-        {
-          test: /\.(js|mjs|jsx|ts|tsx)$/,
-          exclude: /node_modules/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                // This is a feature of `babel-loader` for webpack (not Babel itself).
-                // It enables caching results in ./node_modules/.cache/babel-loader/
-                // directory for faster rebuilds.
-                cacheDirectory: true,
-                plugins: [require.resolve('react-refresh/babel')],
-              },
-            },
-            {
-              loader: '@linaria/webpack-loader',
-              options: {
-                sourceMap: true,
-              },
-            },
-          ],
-        },
         // "postcss" loader applies autoprefixer to our CSS.
         // "css" loader resolves paths in CSS and adds assets as dependencies.
         // "style" loader turns CSS into JS modules that inject <style> tags.
         {
           test: /\.css$/,
+          exclude: /\.module\.css$/,
           resourceQuery: { not: [/raw/] },
           use: [
             'style-loader',
@@ -59,30 +37,23 @@ module.exports = merge(
               loader: 'css-loader',
               options: {
                 importLoaders: 1,
+                sourceMap: true,
+                modules: {
+                  mode: 'icss',
+                },
               },
             },
             {
               // Options for PostCSS as we reference these options twice
-              // Adds vendor prefixing based on your specified browser support in
-              // package.json
+              // Adds vendor prefixing based on your specified browser support in .browserslistrc
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
                   ident: 'postcss',
                   config: false,
-                  plugins: [
-                    'postcss-flexbugs-fixes',
-                    [
-                      'postcss-preset-env',
-                      {
-                        autoprefixer: {
-                          flexbox: 'no-2009',
-                        },
-                        stage: 3,
-                      },
-                    ],
-                  ],
+                  plugins: ['postcss-flexbugs-fixes', 'postcss-normalize'],
                 },
+                sourceMap: true,
               },
             },
           ],
@@ -92,43 +63,35 @@ module.exports = merge(
           // See https://github.com/webpack/webpack/issues/6571
           sideEffects: true,
         },
-        // Opt-in support for SASS (using .scss or .sass extensions).
         {
-          test: /\.(scss|sass)$/,
+          test: /\.module\.css$/,
+          resourceQuery: { not: [/raw/] },
           use: [
             'style-loader',
             {
               loader: 'css-loader',
               options: {
-                importLoaders: 2,
+                importLoaders: 1,
+                sourceMap: true,
+                modules: {
+                  // Using 'local' value has same effect like using 'modules: true'
+                  mode: 'local',
+                  getLocalIdent: getCSSModuleLocalIdent,
+                },
               },
             },
             {
               // Options for PostCSS as we reference these options twice
-              // Adds vendor prefixing based on your specified browser support in
-              // package.json
+              // Adds vendor prefixing based on your specified browser support in .browserslistrc
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
                   ident: 'postcss',
                   config: false,
-                  plugins: [
-                    'postcss-flexbugs-fixes',
-                    [
-                      'postcss-preset-env',
-                      {
-                        autoprefixer: {
-                          flexbox: 'no-2009',
-                        },
-                        stage: 3,
-                      },
-                    ],
-                  ],
+                  plugins: ['postcss-flexbugs-fixes', 'postcss-normalize'],
                 },
+                sourceMap: true,
               },
-            },
-            {
-              loader: 'sass-loader',
             },
           ],
           // Don't consider CSS imports dead code even if the
@@ -144,11 +107,6 @@ module.exports = merge(
       new webpack.EnvironmentPlugin({
         NODE_ENV: 'development',
         ...env,
-      }),
-      // Experimental hot reloading for React .
-      // https://github.com/facebook/react/tree/main/packages/react-refresh
-      new ReactRefreshWebpackPlugin({
-        overlay: false,
       }),
       // Watcher doesn't work well if you mistype casing in a path so we use
       // a plugin that prints an error when you attempt to do this.

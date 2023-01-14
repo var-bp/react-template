@@ -7,17 +7,7 @@ ios_saf >= 13.3
 opera >= 66
 
 [development]
-last 1 chrome version
-last 1 edge version
-last 1 safari version
-last 1 firefox version
-last 1 ios_saf version
-last 1 opera version
+last 1 version
 
 [test]
-last 1 chrome version
-last 1 edge version
-last 1 safari version
-last 1 firefox version
-last 1 ios_saf version
-last 1 opera version
+last 1 version

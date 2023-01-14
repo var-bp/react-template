@@ -1,11 +1,21 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+// const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const PACKAGE_JSON = require('../package.json');
 
 module.exports = {
+  stats: {
+    all: false,
+    errors: true,
+    errorsCount: true,
+    warnings: true,
+    warningsCount: true,
+    version: true,
+    timings: true,
+    logging: 'warn',
+  },
   entry: path.join(__dirname, '../src/index.tsx'),
   output: {
     uniqueName: PACKAGE_JSON.name,
@@ -29,38 +39,25 @@ module.exports = {
   },
   resolve: {
     // This allows you to set a fallback for where webpack should look for modules.
-    // We placed these paths second because we want `node_modules` to "win"
-    // if there are any conflicts.
     modules: ['node_modules', path.join(__dirname, '../node_modules')],
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools.
     extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
-    fallback: {
-      fs: false,
-    },
   },
   module: {
     // Makes missing exports an error instead of warning.
     strictExportPresence: true,
     rules: [
-      // First, run the linter.
-      // It's important to do this before Babel processes the JS.
-      // {
-      //   test: /\.(js|mjs|jsx|ts|tsx)$/,
-      //   include: path.join(__dirname, '../src'),
-      //   enforce: 'pre',
-      //   use: [
-      //     {
-      //       loader: 'eslint-loader',
-      //       options: {
-      //         cache: true,
-      //         eslintPath: 'eslint',
-      //         resolvePluginsRelativeTo: __dirname,
-      //       },
-      //     },
-      //   ],
-      // },
+      {
+        test: /\.(js|mjs|jsx|ts|tsx)$/,
+        exclude: /node_modules/,
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          target: 'esnext',
+        },
+      },
       {
         // https://github.com/jantimon/html-webpack-plugin/issues/1589#issuecomment-768418074
         exclude: [/(^|\.(js|mjs|jsx|ts|tsx|html|css|scss|sass|json|jsonp))$/],
@@ -89,28 +86,31 @@ module.exports = {
         },
       ],
     }),
-    new ESLintPlugin({ extensions: ['js', 'jsx', 'ts', 'tsx'] }),
+    new ESLintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      threads: true,
+    }),
     // Generate an asset manifest file with the following content:
     // - "files" key: Mapping of all asset filenames to their corresponding
     //   output file so that tools can pick it up without having to parse
     //   `index.html`
     // - "entrypoints" key: Array of files which are included in `index.html`,
     //   can be used to reconstruct the HTML if necessary
-    new WebpackManifestPlugin({
-      fileName: 'asset-manifest.json',
-      publicPath: '/',
-      generate: (seed, files, entrypoints) => {
-        const manifestFiles = files.reduce((manifest, file) => {
-          // eslint-disable-next-line no-param-reassign
-          manifest[file.name] = file.path;
-          return manifest;
-        }, seed);
-        const entrypointFiles = entrypoints.main.filter((fileName) => !fileName.endsWith('.map'));
-        return {
-          files: manifestFiles,
-          entrypoints: entrypointFiles,
-        };
-      },
-    }),
+    // new WebpackManifestPlugin({
+    //   fileName: 'asset-manifest.json',
+    //   publicPath: '/',
+    //   generate: (seed, files, entrypoints) => {
+    //     const manifestFiles = files.reduce((manifest, file) => {
+    //       // eslint-disable-next-line no-param-reassign
+    //       manifest[file.name] = file.path;
+    //       return manifest;
+    //     }, seed);
+    //     const entrypointFiles = entrypoints.main.filter((fileName) => !fileName.endsWith('.map'));
+    //     return {
+    //       files: manifestFiles,
+    //       entrypoints: entrypointFiles,
+    //     };
+    //   },
+    // }),
   ],
 };

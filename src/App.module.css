@@ -1,6 +1,4 @@
-import { styled } from '@linaria/react';
-
-export const Container = styled.div`
+.container {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -10,9 +8,9 @@ export const Container = styled.div`
   font-size: calc(10px + 2vmin);
   color: #fff;
   text-align: center;
-`;
+}
 
-export const Img = styled.img`
+.img {
   height: 40vmin;
   pointer-events: none;
 
@@ -28,8 +26,8 @@ export const Img = styled.img`
       }
     }
   }
-`;
+}
 
-export const Link = styled.a`
+.link {
   color: #61dafb;
-`;
+}

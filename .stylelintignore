@@ -1,8 +1,8 @@
 build/
-node_modules/
 coverage/
-public/
 jest/
+node_modules/
+public/
+webpack/
 package.json
 package-lock.json
-yarn.lock
